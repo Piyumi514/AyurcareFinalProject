@@ -14,7 +14,7 @@ dependencies:
   animate_do: ^3.3.4
   flutter_native_splash: ^2.4.0
   flutter_launcher_icons: ^0.13.1
-  firebase_core: ^2.31.0
+  firebase_core: ^2.32.0
   firebase_auth: ^4.19.4
 
 dev_dependencies:
