@@ -1,7 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api, avoid_print
 
+import 'package:ayurcare/db/models/user_model.dart';
+import 'package:ayurcare/db/repository/user_repo.dart';
 import 'package:ayurcare/pages/submit_page.dart';
 import 'package:flutter/material.dart';
+
+import '../util/auth_service.dart';
 
 void main() => runApp(
       const MaterialApp(
@@ -23,13 +27,15 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-
+  String _errorMessage = '';
+  bool _isLoading = false;
   String? _fullNameError;
   String? _emailError;
   String? _passwordError;
   String? _confirmPasswordError;
+  final userRepository = UserRepository();
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     setState(() {
       _fullNameError = _validateFullName(_fullNameController.text);
       _emailError = _validateEmail(_emailController.text);
@@ -47,10 +53,40 @@ class _SignupPageState extends State<SignupPage> {
       );
       return;
     }
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const MyPage()),
-    );
+    setState(() {
+      _isLoading = true;
+      _errorMessage = "";
+    });
+    try {
+      Users user = Users(
+        fullName: _fullNameController.value.text,
+        email: _emailController.value.text,
+        password: _passwordController.value.text,
+      );
+
+      try {
+        await userRepository.addUser(user);
+        await AuthService().registerWithEmailAndPassword(
+            _emailController.value.text, _passwordController.value.text);
+        print('User created/updated successfully');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MyPage()),
+        );
+      } catch (e) {
+        print('Error creating/updating user: $e');
+      }
+
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to register, try again!';
+      });
+    } finally {
+      setState(() {
+        _isLoading = false; // Hide loader when register is complete
+      });
+    }
+
     // If all fields are filled correctly, you can perform signup logic here
     // For demonstration, I'm just printing the values
     print('Full Name: ${_fullNameController.text}');
@@ -245,7 +281,9 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                   ),
                   const SizedBox(height: 50),
-                  Padding(
+                  _isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : Padding(
                     padding: const EdgeInsets.only(
                         left: 20,
                         right: 20,

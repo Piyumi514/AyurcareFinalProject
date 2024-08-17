@@ -2,7 +2,7 @@
 
 import 'package:animate_do/animate_do.dart';
 import 'package:ayurcare/diseases/disease_page.dart';
-import 'package:ayurcare/pages/home.dart';
+import 'package:ayurcare/pages/home_page/home_page_view.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(

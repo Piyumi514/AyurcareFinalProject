@@ -2,8 +2,9 @@
 
 import 'dart:core';
 
-import 'package:ayurcare/pages/home.dart';
+import 'package:ayurcare/pages/home_page/home_page_view.dart';
 import 'package:ayurcare/pages/submit_page.dart';
+import 'package:ayurcare/util/auth_service.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -137,6 +138,9 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _passwordController = TextEditingController();
   String? _emailError;
   String? _passwordError;
+  AuthService _authService = AuthService();
+  String _errorMessage = '';
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -187,40 +191,63 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              final email = _emailController.text;
-              final password = _passwordController.text;
-              if (email.isEmpty || password.isEmpty) {
-                setState(() {
-                  _emailError = email.isEmpty ? 'Please enter email' : null;
-                  _passwordError =
-                      password.isEmpty ? 'Please enter password' : null;
-                });
-              } else if (!isValidEmail(email)) {
-                setState(() {
-                  _emailError = 'Please enter a valid email';
-                });
-              } else {
-                // Proceed with login logic
-                print('Email: $email');
-                print('Password: $password');
-                // Navigate to the next page after login
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MyPage()),
-                );
-              }
-            },
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(
-                  Colors.green[900]!), // Dark green color
-            ),
-            child: const Text(
-              'Login',
-              style: TextStyle(color: Colors.white), // Text color set to white
-            ),
-          ),
+          _isLoading
+              ? Center(child: CircularProgressIndicator())
+              : ElevatedButton(
+                  onPressed: () async {
+                    final email = _emailController.text;
+                    final password = _passwordController.text;
+                    if (email.isEmpty || password.isEmpty) {
+                      setState(() {
+                        _emailError =
+                            email.isEmpty ? 'Please enter email' : null;
+                        _passwordError =
+                            password.isEmpty ? 'Please enter password' : null;
+                      });
+                    } else if (!isValidEmail(email)) {
+                      setState(() {
+                        _emailError = 'Please enter a valid email';
+                      });
+                    } else {
+                      // Proceed with login logic
+                      print('Email: $email');
+                      print('Password: $password');
+                      // Navigate to the next page after login
+                      setState(() {
+                        _isLoading = true;
+                        _errorMessage = "";
+                      });
+                      try {
+                        await _authService.signInWithEmailAndPassword(
+                            _emailController.value.text,
+                            _passwordController.value.text);
+                        print('Signed in successfully');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MyPage()),
+                        );
+                      } catch (e) {
+                        print('Failed to sign in: $e');
+                        setState(() {
+                          _errorMessage = "Wrong Email or Password, try again.";
+                        });
+                      }
+                      setState(() {
+                        _isLoading = false; // Show loader when login is clicked
+                      });
+                    }
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Colors.green[900]!), // Dark green color
+                  ),
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(
+                        color: Colors.white), // Text color set to white
+                  ),
+                ),
         ],
       ),
     );

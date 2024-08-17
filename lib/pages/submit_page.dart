@@ -11,7 +11,7 @@ import 'package:ayurcare/diseases/jointpain.dart';
 import 'package:ayurcare/diseases/nausea.dart';
 import 'package:ayurcare/diseases/skinallergies.dart';
 import 'package:ayurcare/diseases/toothache.dart';
-import 'package:ayurcare/pages/home.dart';
+import 'package:ayurcare/pages/home_page/home_page_view.dart';
 import 'package:ayurcare/pages/plant_recognition.dart';
 import 'package:flutter/material.dart';
 
