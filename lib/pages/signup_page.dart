@@ -71,7 +71,7 @@ class _SignupPageState extends State<SignupPage> {
         print('User created/updated successfully');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const MyPage()),
+          MaterialPageRoute(builder: (context) => MyPage()),
         );
       } catch (e) {
         print('Error creating/updating user: $e');

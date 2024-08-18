@@ -2,6 +2,7 @@
 
 import 'dart:core';
 
+import 'package:ayurcare/db/repository/diseases_repo.dart';
 import 'package:ayurcare/pages/home_page/home_page_view.dart';
 import 'package:ayurcare/pages/submit_page.dart';
 import 'package:ayurcare/util/auth_service.dart';
@@ -225,7 +226,7 @@ class _LoginFormState extends State<LoginForm> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const MyPage()),
+                              builder: (context) => MyPage()),
                         );
                       } catch (e) {
                         print('Failed to sign in: $e');

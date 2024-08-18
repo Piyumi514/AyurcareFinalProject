@@ -1,3 +1,4 @@
+import 'package:ayurcare/db/repository/diseases_repo.dart';
 import 'package:ayurcare/diseases/common_cold.dart';
 import 'package:ayurcare/diseases/constipation.dart';
 import 'package:ayurcare/diseases/diarrhea.dart';
@@ -15,11 +16,29 @@ import 'package:ayurcare/pages/home_page/home_page_view.dart';
 import 'package:ayurcare/pages/plant_recognition.dart';
 import 'package:flutter/material.dart';
 
-class MyPage extends StatelessWidget {
+import '../db/models/diseases_model.dart';
+
+class MyPage extends StatefulWidget {
   const MyPage({super.key});
 
   @override
+  State<MyPage> createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
+  final DiseasesRepo diseasesRepo = DiseasesRepo();
+  List<DiseasesModel> diseaseList = [];
+
+  getDiseases() async {
+    final list = await diseasesRepo.getDiseases();
+    setState(() {
+      diseaseList = list;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    getDiseases();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -168,25 +187,11 @@ class MyPage extends StatelessWidget {
                       );
                     }
                   },
-                  items: <String>[
-                    'Asthma (ඇදුම)',
-                    'Common cold (සෙම්ප්‍රතිශ්‍යාව)',
-                    'Indigestion (අජීර්ණය)',
-                    'Headache (හිසරදය)',
-                    'Joint Pain/Arthritis (හන්දිපත් රුදාව)',
-                    'Insomnia (නින්ද නොයාම)',
-                    'Constipation (මලබද්ධය)',
-                    'Toothache (දත් කැක්කුම)',
-                    'Skin Allergies (සමේ අසාත්මිකතා)',
-                    'Hair Loss (හිසකෙස් නැතිවීම)',
-                    'Fever (උණ)',
-                    'Diarrhea (පාචනය)',
-                    'Nausea (ඔක්කාරය)',
-                    // Add more options as needed
-                  ].map<DropdownMenuItem<String>>((String value) {
+                  items: diseaseList
+                      .map<DropdownMenuItem<String>>((DiseasesModel value) {
                     return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
+                      value: value.diseasesName,
+                      child: Text(value.diseasesName),
                     );
                   }).toList(),
                 ),
