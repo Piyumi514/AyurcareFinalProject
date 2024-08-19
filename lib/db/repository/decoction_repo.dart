@@ -1,8 +1,8 @@
 import 'package:ayurcare/db/models/decoction_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class RemedyRepository {
-  final CollectionReference collection = FirebaseFirestore.instance.collection('remedies');
+class DecoctionRepo {
+  final CollectionReference collection = FirebaseFirestore.instance.collection('decoctions');
 
   // Fetch all remedies
   Future<List<Remedy>> getRemedies() async {

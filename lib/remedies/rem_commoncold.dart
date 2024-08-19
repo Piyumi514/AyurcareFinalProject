@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types, library_private_types_in_public_api
 
 import 'package:ayurcare/diseases/common_cold.dart';
+import 'package:ayurcare/widgets/ImageRemedyViewer.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -90,7 +91,7 @@ class HomePage extends StatelessWidget {
                     style: TextStyle(fontSize: 14),
                   ),
                   SizedBox(height: 20),
-                  ImageSwapper(), // Custom Widget for image swapping
+                  ImageRemedyViewer(), // Custom Widget for image swapping
                   SizedBox(height: 20),
                 ],
               ),

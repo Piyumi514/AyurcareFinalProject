@@ -17,9 +17,9 @@ void main() async {
   if (defaultTargetPlatform != TargetPlatform.windows) {
     // window currently don't support storage emulator
     final emulatorHost =
-    (!kIsWeb && defaultTargetPlatform == TargetPlatform.android)
-        ? '10.0.2.2'
-        : 'localhost';
+        (!kIsWeb && defaultTargetPlatform == TargetPlatform.android)
+            ? '10.0.2.2'
+            : 'localhost';
 
     await FirebaseStorage.instance.useStorageEmulator(emulatorHost, 9199);
   }
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  FutureBuilder<User?>(
+      home: FutureBuilder<User?>(
         future: AuthService().getCurrentUser(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

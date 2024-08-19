@@ -2,6 +2,7 @@
 
 //import 'package:ayurcare/disease_page.dart';
 import 'package:ayurcare/diseases/hairloss.dart';
+import 'package:ayurcare/widgets/ImageRemedyViewer.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -91,7 +92,7 @@ class HomePage extends StatelessWidget {
                     style: TextStyle(fontSize: 14),
                   ),
                   SizedBox(height: 20),
-                  ImageSwapper(), // Custom Widget for image swapping
+                  ImageRemedyViewer(),
                   SizedBox(height: 20),
                 ],
               ),

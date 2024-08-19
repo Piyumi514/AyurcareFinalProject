@@ -7,6 +7,7 @@ import 'package:ayurcare/pages/plant_recognition.dart';
 import 'package:ayurcare/pages/submit_page.dart';
 import 'package:ayurcare/remedies/rem_commoncold.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const common_cold());
@@ -109,7 +110,10 @@ class myProject extends StatelessWidget {
                 
                 Center(
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setString('type', "remedy");
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -138,7 +142,10 @@ class myProject extends StatelessWidget {
                 ),
                 Center(
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setString('type', "decoctions");
                       Navigator.push(
                         context,
                         MaterialPageRoute(

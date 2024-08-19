@@ -1,33 +1,37 @@
-// ignore_for_file: camel_case_types
-
+import 'package:ayurcare/db/models/remedy_model.dart';
+import 'package:ayurcare/db/repository/diseases_repo.dart';
 import 'package:ayurcare/decoction/decoction_view.dart';
 import 'package:ayurcare/pages/doctor_details.dart';
-import 'package:ayurcare/remedies/rem_asthma.dart';
 import 'package:ayurcare/pages/plant_recognition.dart';
 import 'package:ayurcare/pages/submit_page.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const disease());
-}
-
-class disease extends StatelessWidget {
-  const disease({super.key});
+class DiseasesView extends StatefulWidget {
+  const DiseasesView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: myProject(),
-    );
+  State<DiseasesView> createState() => _DiseasesViewState();
+}
+
+class _DiseasesViewState extends State<DiseasesView> {
+  DiseasesModel? diseasesModel;
+
+  void loadDiseaseData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final disease = await prefs.getString('remedyName') ?? "";
+    final diseaseMo = await DiseasesRepo().getDiseaseByName(disease);
+
+    setState(() {
+      diseasesModel = diseaseMo;
+    });
   }
-}
-
-class myProject extends StatelessWidget {
-  const myProject({super.key});
 
   @override
   Widget build(BuildContext context) {
+    if (diseasesModel == null) {
+      loadDiseaseData();
+    }
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
@@ -83,9 +87,10 @@ class myProject extends StatelessWidget {
                 const SizedBox(
                   height: 120,
                 ),
-                const Center(
+                Center(
                   child: Text(
-                    "ASTHMA",
+                    diseasesModel?.diseasesName ?? "",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Times New Roman',
                         color: Color.fromARGB(255, 3, 84, 3),
@@ -93,10 +98,10 @@ class myProject extends StatelessWidget {
                         fontWeight: FontWeight.w900),
                   ),
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.all(30.0),
                   child: Text(
-                    "Asthma is a chronic lung disease affecting people of all ages. It is caused by inflammation and muscle tightening around the airways, which makes it harder to breathe. Symptoms can include coughing, wheezing, shortness of breath and chest tightness.",
+                    diseasesModel?.details ?? "",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                         fontFamily: 'Times New Roman',
@@ -107,11 +112,14 @@ class myProject extends StatelessWidget {
                 ),
                 Center(
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setString('type', "remedy");
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const homeremedies()),
+                            builder: (context) => const DecoctionView(type: "remedy",)),
                       );
                     },
                     child: Container(
@@ -136,12 +144,15 @@ class myProject extends StatelessWidget {
                 ),
                 Center(
                   child: GestureDetector(
-                    onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) => const dec_asthma()),
-                      // );
+                    onTap: () async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setString('type', "decoctions");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const DecoctionView(type: "decoctions",)),
+                      );
                     },
                     child: Container(
                       width: 175,
@@ -201,9 +212,7 @@ class myProject extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const DoctorPage(
-                                    exportData: null,
-                                  ),
+                                  builder: (context) => const DoctorPage(exportData: null,),
                                 ),
                               );
                             },

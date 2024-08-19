@@ -6,6 +6,7 @@ import 'package:ayurcare/diseases/common_cold.dart';
 import 'package:ayurcare/diseases/constipation.dart';
 import 'package:ayurcare/diseases/diarrhea.dart';
 import 'package:ayurcare/diseases/disease_page.dart';
+import 'package:ayurcare/diseases/diseases_view.dart';
 import 'package:ayurcare/diseases/fever.dart';
 import 'package:ayurcare/diseases/hairloss.dart';
 import 'package:ayurcare/diseases/headache.dart';
@@ -20,6 +21,7 @@ import 'package:ayurcare/pages/home_page/home_page_view.dart';
 import 'package:ayurcare/pages/plant_recognition.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../db/models/remedy_model.dart';
 
 class MyPage extends StatelessWidget {
@@ -34,7 +36,6 @@ class MyPage extends StatelessWidget {
   }
 }
 
-
 class MyPageView extends StatefulWidget {
   const MyPageView({super.key});
 
@@ -45,6 +46,7 @@ class MyPageView extends StatefulWidget {
 class _MyPageState extends State<MyPageView> {
   final DiseasesRepo diseasesRepo = DiseasesRepo();
   List<DiseasesModel> diseaseList = [];
+
   getDiseases() async {
     final list = await diseasesRepo.getDiseases();
     setState(() {
@@ -126,86 +128,94 @@ class _MyPageState extends State<MyPageView> {
                 child: DropdownButton<String>(
                   isExpanded: true,
                   hint: const Text('Select the Disease'),
-                  onChanged: (newValue) {
+                  onChanged: (newValue) async {
                     counterBloc.add(AddRemedy(newValue ?? ""));
-                    if (newValue == 'Asthma (ඇදුම)') {
+                    final SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    await prefs.setString('remedyName', newValue ?? "");
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const disease()),
+                            builder: (context) => const DiseasesView()),
                       );
-                    } else if (newValue == 'Common cold (සෙම්ප්‍රතිශ්‍යාව)') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const common_cold()),
-                      );
-                    } else if (newValue == 'Indigestion (අජීර්ණය)') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const indigestion()),
-                      );
-                    } else if (newValue == 'Headache (හිසරදය)') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const headache()),
-                      );
-                    } else if (newValue ==
-                        'Joint Pain/Arthritis (හන්දිපත් රුදාව)') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const jointpain()),
-                      );
-                    } else if (newValue == 'Insomnia (නින්ද නොයාම)') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const insomnia()),
-                      );
-                    } else if (newValue == 'Constipation (මලබද්ධය)') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const constipation()),
-                      );
-                    } else if (newValue == 'Toothache (දත් කැක්කුම)') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const toothache()),
-                      );
-                    } else if (newValue == 'Skin Allergies (සමේ අසාත්මිකතා)') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const skinallergies()),
-                      );
-                    } else if (newValue == 'Hair Loss (හිසකෙස් නැතිවීම)') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const hairloss()),
-                      );
-                    } else if (newValue == 'Fever (උණ)') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const fever()),
-                      );
-                    } else if (newValue == 'Diarrhea (පාචනය)') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const diarrhea()),
-                      );
-                    } else if (newValue == 'Nausea (ඔක්කාරය)') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const nausea()),
-                      );
-                    }
+                    // if (newValue == 'Asthma (ඇදුම)') {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const disease()),
+                    //   );
+                    // } else if (newValue == 'Common cold (සෙම්ප්‍රතිශ්‍යාව)') {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const common_cold()),
+                    //   );
+                    // } else if (newValue == 'Indigestion (අජීර්ණය)') {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const indigestion()),
+                    //   );
+                    // } else if (newValue == 'Headache (හිසරදය)') {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const headache()),
+                    //   );
+                    // } else if (newValue ==
+                    //     'Joint Pain/Arthritis (හන්දිපත් රුදාව)') {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const jointpain()),
+                    //   );
+                    // } else if (newValue == 'Insomnia (නින්ද නොයාම)') {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const insomnia()),
+                    //   );
+                    // } else if (newValue == 'Constipation (මලබද්ධය)') {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const constipation()),
+                    //   );
+                    // } else if (newValue == 'Toothache (දත් කැක්කුම)') {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const toothache()),
+                    //   );
+                    // } else if (newValue == 'Skin Allergies (සමේ අසාත්මිකතා)') {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const skinallergies()),
+                    //   );
+                    // } else if (newValue == 'Hair Loss (හිසකෙස් නැතිවීම)') {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const hairloss()),
+                    //   );
+                    // } else if (newValue == 'Fever (උණ)') {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(builder: (context) => const fever()),
+                    //   );
+                    // } else if (newValue == 'Diarrhea (පාචනය)') {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const diarrhea()),
+                    //   );
+                    // } else if (newValue == 'Nausea (ඔක්කාරය)') {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(builder: (context) => const nausea()),
+                    //   );
+                    // }
                   },
                   items: diseaseList
                       .map<DropdownMenuItem<String>>((DiseasesModel value) {
