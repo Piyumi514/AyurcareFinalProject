@@ -1,8 +1,7 @@
 // ignore_for_file: camel_case_types, library_private_types_in_public_api
 
 import 'package:animate_do/animate_do.dart';
-import 'package:ayurcare/diseases/disease_page.dart';
-import 'package:ayurcare/pages/home_page/home_page_view.dart';
+import 'package:ayurcare/diseases/diseases_view.dart';
 import 'package:ayurcare/pages/submit_page.dart';
 import 'package:flutter/material.dart';
 
@@ -208,7 +207,7 @@ class _DoctorPageState extends State<DoctorPage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const disease()),
+                MaterialPageRoute(builder: (context) => const DiseasesView()),
               );
             },
           ),

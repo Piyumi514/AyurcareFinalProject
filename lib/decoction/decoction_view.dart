@@ -1,11 +1,9 @@
 // ignore_for_file: camel_case_types, library_private_types_in_public_api
 
 //import 'package:ayurcare/disease_page.dart';
-import 'package:ayurcare/diseases/disease_page.dart';
 import 'package:ayurcare/diseases/diseases_view.dart';
 import 'package:ayurcare/widgets/ImageRemedyViewer.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // void main() {
 //   runApp(const dec_asthma());
