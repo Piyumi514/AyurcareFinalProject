@@ -9,7 +9,6 @@ class DiseasesModel {
 
   factory DiseasesModel.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map<String, dynamic>;
-    print(data);
     return DiseasesModel(
         diseasesName: data['diseases_name'] ?? ''
     );

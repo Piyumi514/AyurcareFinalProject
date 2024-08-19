@@ -1,4 +1,7 @@
+import 'package:ayurcare/bloc/remedy_bloc.dart';
+import 'package:ayurcare/db/models/decoction_model.dart';
 import 'package:ayurcare/db/repository/diseases_repo.dart';
+import 'package:ayurcare/db/repository/remedy_repo.dart';
 import 'package:ayurcare/diseases/common_cold.dart';
 import 'package:ayurcare/diseases/constipation.dart';
 import 'package:ayurcare/diseases/diarrhea.dart';
@@ -12,23 +15,36 @@ import 'package:ayurcare/diseases/jointpain.dart';
 import 'package:ayurcare/diseases/nausea.dart';
 import 'package:ayurcare/diseases/skinallergies.dart';
 import 'package:ayurcare/diseases/toothache.dart';
+import 'package:ayurcare/events/remedy_event.dart';
 import 'package:ayurcare/pages/home_page/home_page_view.dart';
 import 'package:ayurcare/pages/plant_recognition.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../db/models/remedy_model.dart';
 
-import '../db/models/diseases_model.dart';
-
-class MyPage extends StatefulWidget {
+class MyPage extends StatelessWidget {
   const MyPage({super.key});
 
   @override
-  State<MyPage> createState() => _MyPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => RemedyBloc(),
+      child: MyPageView(),
+    );
+  }
 }
 
-class _MyPageState extends State<MyPage> {
+
+class MyPageView extends StatefulWidget {
+  const MyPageView({super.key});
+
+  @override
+  State<MyPageView> createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPageView> {
   final DiseasesRepo diseasesRepo = DiseasesRepo();
   List<DiseasesModel> diseaseList = [];
-
   getDiseases() async {
     final list = await diseasesRepo.getDiseases();
     setState(() {
@@ -38,7 +54,10 @@ class _MyPageState extends State<MyPage> {
 
   @override
   Widget build(BuildContext context) {
-    getDiseases();
+    final counterBloc = BlocProvider.of<RemedyBloc>(context);
+    if (diseaseList.length == 0) {
+      getDiseases();
+    }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -108,6 +127,7 @@ class _MyPageState extends State<MyPage> {
                   isExpanded: true,
                   hint: const Text('Select the Disease'),
                   onChanged: (newValue) {
+                    counterBloc.add(AddRemedy(newValue ?? ""));
                     if (newValue == 'Asthma (ඇදුම)') {
                       Navigator.push(
                         context,

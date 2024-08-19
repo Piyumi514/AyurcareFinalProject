@@ -75,6 +75,10 @@ class _SignupPageState extends State<SignupPage> {
         );
       } catch (e) {
         print('Error creating/updating user: $e');
+        var snackBar = SnackBar(
+          content: Text(e.toString()),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
 
     } catch (e) {
@@ -114,7 +118,7 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.isEmpty || value.length > 5) {
       return 'Please enter a password';
     }
     return null;
