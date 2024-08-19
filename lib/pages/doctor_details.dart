@@ -1,6 +1,8 @@
 // ignore_for_file: camel_case_types, library_private_types_in_public_api
 
 import 'package:animate_do/animate_do.dart';
+import 'package:ayurcare/db/models/doctor_model.dart';
+import 'package:ayurcare/db/repository/doctor_repo.dart';
 import 'package:ayurcare/diseases/diseases_view.dart';
 import 'package:ayurcare/pages/submit_page.dart';
 import 'package:flutter/material.dart';
@@ -23,176 +25,44 @@ class DoctorPage extends StatefulWidget {
 
 class _DoctorPageState extends State<DoctorPage> {
   String? selectedDistrict;
-  final Map<String, Map<String, String>> doctorDetails = {
-    'Ampara': {
-      'name': 'Dr. Isuru Liyanage',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Ayurvedic Research Hospital',
-      'address': 'Ayurvedic Research Hospital,Ampara',
-      'contact': '0632224349'
-    },
-    'Anuradhapura': {
-      'name': 'Dr. Thilini Perera',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Ayurweda Medical Center',
-      'address': '309, devana piyawara, Thambuttegama',
-      'contact': '0718855940'
-    },
-    'Badulla': {
-      'name': 'Dr. Gayathri Madumani',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Gampaha Ayurweda Medical Center',
-      'address': 'Haldummulla, Haputale, Sri Lanka',
-      'contact': '0704041699'
-    },
-    'Batticaloa': {
-      'name': 'Dr.Thusya Yathies',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Borella ayurvedic Hospital',
-      'address': 'Borella ayurvedic hospital,Batticaloa',
-      'contact': '065 2222678'
-    },
-    'Colombo': {
-      'name': 'Dr K A D Keeshani Randima',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Ayurdhara Ayurwedic Medical Center',
-      'address': 'No. 102G Bangalawata, Kothalawala, Kaduwela',
-      'contact': '0771383439'
-    },
-    'Galle': {
-      'name': 'Dr. Oshini Siriwardhana',
-      'specialization': 'General Physician',
-      'medicalCentre': '',
-      'address': '86/2 Wakwella rd, Galle',
-      'contact': '0778634089'
-    },
-    'Gampaha': {
-      'name': 'Dr R. M. D Sasrika',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Seth AYU Medical Center',
-      'address': '247/1, Pahala Karagahamuna, Kadawatha',
-      'contact': '0773756563'
-    },
-    'Hambantota': {
-      'name': 'Dr.Athma Karunathilaka',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Ayurvedic Research Hospital',
-      'address': 'Siribopura, Hambantota',
-      'contact': '047-2256700'
-    },
-    'Jaffna': {
-      'name': 'Dr.(Mrs).S.Thurairatnam',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Siddha Teaching Hospital',
-      'address': 'Kaithady,Kandy Road',
-      'contact': '0212057104'
-    },
-    'Kalutara': {
-      'name': 'Dr. Chamari Adihetti',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Ayurwedic Medical Center',
-      'address': '247/1, Pahala Karagahamuna, Kadawatha',
-      'contact': '0712393687'
-    },
-    'Kandy': {
-      'name': 'Dr. Harshana Dissanayake',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Jeewaka Ayurweda',
-      'address': 'Kandy Road, Hasalaka',
-      'contact': '0714541705'
-    },
-    'Kegalle': {
-      'name': 'Dr. Hansani Wimalasena',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Ayushveda - Ayurweda & Wellness',
-      'address': 'No. 37, Kandy road, Kegalle',
-      'contact': '0774166864'
-    },
-    'Kilinochchi': {
-      'name': 'Dr. P.Karunja ',
-      'specialization': 'General Physician',
-      'medicalCentre': 'HDU, DGH Chilaw',
-      'address': 'RDHS Division , Kilinochchi',
-      'contact': '0718561596'
-    },
-    'Kurunegala': {
-      'name': 'Dr. Udith',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Ayurwedic Medical Center',
-      'address': 'Kurunegala, Pothuhera',
-      'contact': '0772656131'
-    },
-    'Mannar': {
-      'name': 'Dr. Thiyananthan Thinesh',
-      'specialization': 'General Physician',
-      'medicalCentre': 'SURYA Ayurveda Hospital & YOGA Centre',
-      'address': 'SURYA Ayurveda Hospital, Mannar',
-      'contact': '076 731 5797'
-    },
-    'Matale': {
-      'name': 'Dr. Dimitri Darshika',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Deegayush Ayurweda Medical Center',
-      'address': 'No. 15 Rose Street, Matale',
-      'contact': '0763925388'
-    },
-    'Matara': {
-      'name': 'M.D.M Warnathilaka',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Sakya Traditional Ayuruwedic Hospital',
-      'address': 'No:678, Matara 81000',
-      'contact': '0412 244 833'
-    },
-    'Moneragala': {
-      'name': 'Dr. Indika Nuwan',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Gampaha Ayurweda Medical Center',
-      'address': 'Haputale Road, Wallawaya',
-      'contact': '0719178775'
-    },
-    'Nuwara Eliya': {
-      'name': 'Dr. Tharanga Weerathunga',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Thilaka Treatement Ayurveda Center',
-      'address': 'No.22 Lady Mc Cullum s Drive, Lady McClums Dr',
-      'contact': '071 084 7522'
-    },
-    'Polonnaruwa': {
-      'name': 'Dr. W.S.D. Sooriya bandara',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Rural Ayurveda Hospital',
-      'address': 'Rural Ayurveda Hospital, Siripura',
-      'contact': '00272-0537'
-    },
-    'Puttalam': {
-      'name': 'Dr. N M U Madhubhashini',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Sukayu Ayurweda Medical Center',
-      'address': 'Newtown, Madampe',
-      'contact': '0710647771'
-    },
-    'Ratnapura': {
-      'name': 'Dr. D G N Awanthi',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Sumethma Ayurwedic Medical Center',
-      'address': 'Thelwatte, Mudduwa, Rathnapura',
-      'contact': '0773572530'
-    },
-    'Trincomalee': {
-      'name': 'Dr. Chamil Karunarathna',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Trinco Ayurweda Clinic',
-      'address': 'Kandy road, Trincomalee',
-      'contact': '0713784039'
-    },
-    'Vavuniya': {
-      'name': 'Dr. Thambippillai Krishnapahavan',
-      'specialization': 'General Physician',
-      'medicalCentre': 'Krishna Siddha Ayurveda Vaidyasalai',
-      'address': 'no-11,3rd cross street,Kandy road',
-      'contact': '071 210 2913'
-    },
-  };
+  DoctorModel? model;
+
+  final finalDistricts = [
+    "Ampara",
+    "Anuradhapura",
+    "Badulla",
+    "Batticaloa",
+    "Colombo",
+    "Galle",
+    "Gampaha",
+    "Hambantota",
+    "Jaffna",
+    "Kalutara",
+    "Kandy",
+    "Kegalle",
+    "Kilinochchi",
+    "Kurunegala",
+    "Mannar",
+    "Matale",
+    "Matara",
+    "Moneragala",
+    "Nuwara Eliya",
+    "Polonnaruwa",
+    "Puttalam",
+    "Ratnapura",
+    "Trincomalee",
+    "Vavuniya"
+  ];
+
+  void getDoctorDetails(String? selectedDistrict) async {
+    try {
+      final repo = DoctorRepository();
+      final doctor = await repo.getDoctorByDistrict(selectedDistrict ?? "");
+      setState(() {
+        model = doctor;
+      });
+    } catch (e) {}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -307,22 +177,20 @@ class _DoctorPageState extends State<DoctorPage> {
                         value: selectedDistrict,
                         hint: const Text("Select District"),
                         isExpanded: true,
-                        items: doctorDetails.keys.map((String district) {
+                        items: finalDistricts.map((String district) {
                           return DropdownMenuItem<String>(
                             value: district,
                             child: Text(district),
                           );
                         }).toList(),
                         onChanged: (String? newValue) {
-                          setState(() {
-                            selectedDistrict = newValue;
-                          });
+                          getDoctorDetails(newValue);
                         },
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  selectedDistrict != null
+                  model != null
                       ? FadeInUp(
                           duration: const Duration(milliseconds: 1700),
                           child: Container(
@@ -344,25 +212,23 @@ class _DoctorPageState extends State<DoctorPage> {
                               children: <Widget>[
                                 _buildTextField(
                                   "Doctor Name",
-                                  doctorDetails[selectedDistrict]!['name']!,
+                                  model?.name ?? "",
                                 ),
                                 _buildTextField(
                                   "Specialization",
-                                  doctorDetails[selectedDistrict]![
-                                      'specialization']!,
+                                  model?.specialization ?? "",
                                 ),
                                 _buildTextField(
                                   "Medical Centre",
-                                  doctorDetails[selectedDistrict]![
-                                      'medicalCentre']!,
+                                  model?.medicalCentre ?? "",
                                 ),
                                 _buildTextField(
                                   "Address",
-                                  doctorDetails[selectedDistrict]!['address']!,
+                                  model?.address ?? "",
                                 ),
                                 _buildTextField(
                                   "Contact Info",
-                                  doctorDetails[selectedDistrict]!['contact']!,
+                                  model?.contact ?? "",
                                 ),
                               ],
                             ),
@@ -424,14 +290,26 @@ class _DoctorPageState extends State<DoctorPage> {
       ),
       child: Row(
         children: [
-          Text(
-            "$label: ",
-            style: TextStyle(
-                color: Colors.grey.shade700, fontWeight: FontWeight.bold),
+          Expanded(
+            flex: 1, // Adjust this as necessary
+            child: Text(
+              "$label: ",
+              style: TextStyle(
+                color: Colors.grey.shade700,
+                fontWeight: FontWeight.bold,
+                overflow: TextOverflow.clip,
+              ),
+              maxLines: 2,
+            ),
           ),
-          Text(
-            value,
-            style: TextStyle(color: Colors.grey.shade700),
+          Expanded(
+            flex: 2, // Adjust this as necessary
+            child: Text(
+              value,
+              style: TextStyle(
+                  color: Colors.grey.shade700, overflow: TextOverflow.clip),
+              maxLines: 2,
+            ),
           ),
         ],
       ),
