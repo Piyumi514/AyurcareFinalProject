@@ -7,13 +7,6 @@ import 'package:ayurcare/diseases/diseases_view.dart';
 import 'package:ayurcare/pages/submit_page.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(
-      const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: DoctorPage(exportData: null),
-      ),
-    );
-
 class DoctorPage extends StatefulWidget {
   final dynamic exportData;
 
